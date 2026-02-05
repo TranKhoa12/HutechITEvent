@@ -1,0 +1,80 @@
+﻿@model IEnumerable<HutechITEvent.Models.Event>
+@{
+    ViewData["Title"] = "Danh sách Sự kiện";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Danh sách Sự kiện</h1>
+        @if (User.IsInRole("Admin") || User.IsInRole("Lecturer"))
+        {
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Tạo sự kiện mới
+            </a>
+        }
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <h4>Chưa có sự kiện nào</h4>
+            <p>Hiện tại chưa có sự kiện nào được công bố.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        @if (!string.IsNullOrEmpty(item.ThumbnailUrl))
+                        {
+                            <img src="@item.ThumbnailUrl" class="card-img-top" alt="@item.Title" style="height: 200px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="bi bi-calendar-event" style="font-size: 3rem;"></i>
+                            </div>
+                        }
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Title</h5>
+                            <p class="card-text text-muted">
+                                @if (item.Description.Length > 100)
+                                {
+                                    @(item.Description.Substring(0, 100) + "...")
+                                }
+                                else
+                                {
+                                    @item.Description
+                                }
+                            </p>
+                            <div class="mb-2">
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar"></i> @item.StartDate.ToString("dd/MM/yyyy")
+                                </small>
+                                <br />
+                                <small class="text-muted">
+                                    <i class="bi bi-geo-alt"></i> @item.Location
+                                </small>
+                                <br />
+                                <small class="text-muted">
+                                    <i class="bi bi-people"></i> Tối đa @item.MaxParticipants người
+                                </small>
+                            </div>
+                            <span class="badge bg-@(item.Status == EventStatus.Published ? "success" : item.Status == EventStatus.Ongoing ? "primary" : "secondary")">
+                                @item.Status.ToString()
+                            </span>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary w-100">
+                                Xem chi tiết
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

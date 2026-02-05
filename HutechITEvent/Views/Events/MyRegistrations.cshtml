@@ -1,0 +1,88 @@
+﻿@model IEnumerable<HutechITEvent.Models.EventRegistration>
+@{
+    ViewData["Title"] = "Sự kiện đã đăng ký";
+}
+
+<div class="container mt-4">
+    <h1>Sự kiện đã đăng ký</h1>
+    <hr />
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <h4>Chưa đăng ký sự kiện nào</h4>
+            <p>Bạn chưa đăng ký tham gia sự kiện nào. <a asp-action="Index">Xem danh sách sự kiện</a></p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Sự kiện</th>
+                        <th>Thời gian</th>
+                        <th>Địa điểm</th>
+                        <th>Ngày đăng ký</th>
+                        <th>Trạng thái</th>
+                        <th>Điểm danh</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.EventId" class="text-decoration-none">
+                                    <strong>@item.Event.Title</strong>
+                                </a>
+                                <br />
+                                <small class="text-muted">
+                                    <span class="badge bg-info">@item.Event.Category?.Name</span>
+                                </small>
+                            </td>
+                            <td>
+                                <small>@item.Event.StartDate.ToString("dd/MM/yyyy HH:mm")</small>
+                            </td>
+                            <td>
+                                <small>@item.Event.Location</small>
+                            </td>
+                            <td>
+                                <small>@item.RegisteredAt.ToString("dd/MM/yyyy")</small>
+                            </td>
+                            <td>
+                                <span class="badge bg-@(item.Status == RegistrationStatus.Confirmed ? "success" : item.Status == RegistrationStatus.Pending ? "warning" : "danger")">
+                                    @item.Status.ToString()
+                                </span>
+                            </td>
+                            <td>
+                                @if (item.IsAttended)
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle"></i> Đã điểm danh
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Chưa điểm danh</span>
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.EventId" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> Xem
+                                </a>
+                                <form asp-action="Unregister" method="post" class="d-inline">
+                                    <input type="hidden" name="eventId" value="@item.EventId" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn có chắc muốn hủy đăng ký?')">
+                                        <i class="bi bi-x-circle"></i> Hủy
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

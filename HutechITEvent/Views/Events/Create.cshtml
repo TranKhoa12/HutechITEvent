@@ -1,0 +1,133 @@
+﻿@model HutechITEvent.Models.Event
+@{
+    ViewData["Title"] = "Tạo sự kiện mới";
+}
+
+<div class="container mt-4">
+    <h1>Tạo sự kiện mới</h1>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                
+                @if (ViewBag.ValidationErrors != null)
+                {
+                    <div class="alert alert-danger">
+                        <h6>Lỗi validation:</h6>
+                        <ul>
+                            @foreach (var error in ViewBag.ValidationErrors)
+                            {
+                                <li>@error</li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label"></label>
+                    <input asp-for="Title" class="form-control" placeholder="VD: Hội thảo Công nghệ AI 2024" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description" class="form-control" rows="5" placeholder="Mô tả chi tiết về sự kiện..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="StartDate" class="form-label"></label>
+                        <input asp-for="StartDate" type="datetime-local" class="form-control" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="EndDate" class="form-label"></label>
+                        <input asp-for="EndDate" type="datetime-local" class="form-control" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Location" class="form-label"></label>
+                    <input asp-for="Location" class="form-control" placeholder="VD: Hội trường A, Tầng 3, Tòa nhà B" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="MaxParticipants" class="form-label"></label>
+                        <input asp-for="MaxParticipants" type="number" class="form-control" min="1" value="100" />
+                        <span asp-validation-for="MaxParticipants" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="CategoryId" class="form-label"></label>
+                        <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId">
+                            <option value="">-- Chọn danh mục --</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Ảnh đại diện</label>
+                    <input type="file" name="thumbnailFile" class="form-control" accept="image/*" id="thumbnailFile" />
+                    <small class="form-text text-muted">Chọn ảnh từ máy tính (jpg, png, gif)</small>
+                    <div class="mt-2">
+                        <img id="imagePreview" src="#" alt="Preview" style="max-width: 200px; display: none;" class="img-thumbnail" />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ThumbnailUrl" class="form-label">Hoặc nhập URL ảnh</label>
+                    <input asp-for="ThumbnailUrl" class="form-control" placeholder="https://example.com/image.jpg" />
+                    <span asp-validation-for="ThumbnailUrl" class="text-danger"></span>
+                    <small class="form-text text-muted">Nếu không upload ảnh, có thể nhập URL</small>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Tạo sự kiện</button>
+                    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Hướng dẫn</h5>
+                    <hr />
+                    <ul class="small">
+                        <li>Điền đầy đủ thông tin sự kiện</li>
+                        <li>Chọn thời gian phù hợp</li>
+                        <li>Đảm bảo số lượng người tham gia hợp lý</li>
+                        <li>Mô tả chi tiết để thu hút sinh viên</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Preview image before upload
+        document.getElementById('thumbnailFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = event.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+}

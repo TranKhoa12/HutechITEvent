@@ -1,0 +1,50 @@
+﻿@model HutechITEvent.Models.Event
+@{
+    ViewData["Title"] = "Xóa sự kiện";
+}
+
+<div class="container mt-4">
+    <h1 class="text-danger">Xóa sự kiện</h1>
+    <hr />
+
+    <div class="alert alert-danger">
+        <h4>Bạn có chắc chắn muốn xóa sự kiện này?</h4>
+        <p>Hành động này không thể hoàn tác!</p>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Title</h5>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-3">Mô tả</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+
+                <dt class="col-sm-3">Thời gian</dt>
+                <dd class="col-sm-9">
+                    @Model.StartDate.ToString("dd/MM/yyyy HH:mm") - @Model.EndDate.ToString("dd/MM/yyyy HH:mm")
+                </dd>
+
+                <dt class="col-sm-3">Địa điểm</dt>
+                <dd class="col-sm-9">@Model.Location</dd>
+
+                <dt class="col-sm-3">Số lượng đăng ký</dt>
+                <dd class="col-sm-9">@Model.Registrations.Count / @Model.MaxParticipants người</dd>
+
+                <dt class="col-sm-3">Danh mục</dt>
+                <dd class="col-sm-9">@Model.Category?.Name</dd>
+
+                <dt class="col-sm-3">Trạng thái</dt>
+                <dd class="col-sm-9">
+                    <span class="badge bg-secondary">@Model.Status.ToString()</span>
+                </dd>
+            </dl>
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Hủy</a>
+            </form>
+        </div>
+    </div>
+</div>
