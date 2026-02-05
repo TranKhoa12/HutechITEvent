@@ -1,22 +1,12 @@
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace HutechITEvent.Models
 {
-    public class User
+    public class User : IdentityUser<int>
     {
-        public int Id { get; set; }
+        // IdentityUser ?ã có s?n: Id, Email, PasswordHash, PhoneNumber, UserName
         
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; } = string.Empty;
-        
-        [Required]
-        public string PasswordHash { get; set; } = string.Empty;
-        
-        [Required]
         public string FullName { get; set; } = string.Empty;
-        
-        public string? PhoneNumber { get; set; }
         
         public string? Avatar { get; set; }
         
@@ -27,7 +17,6 @@ namespace HutechITEvent.Models
         public DateTime? LastLogin { get; set; }
         
         // Navigation properties
-        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
         public Student? Student { get; set; }
         public ICollection<Event> OrganizedEvents { get; set; } = new List<Event>();
         public ICollection<Contest> OrganizedContests { get; set; } = new List<Contest>();

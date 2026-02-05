@@ -25,7 +25,7 @@ namespace HutechITEvent.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder); // Quan trọng: gọi base trước
 
             // Student Configuration
             modelBuilder.Entity<Student>(entity =>
@@ -177,26 +177,26 @@ namespace HutechITEvent.Data
         private void SeedRoles(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ApplicationRole>().HasData(
-                new ApplicationRole
-                {
-                    Id = 1,
-                    Name = RoleNames.Admin,
+                new ApplicationRole 
+                { 
+                    Id = 1, 
+                    Name = RoleNames.Admin, 
                     NormalizedName = RoleNames.Admin.ToUpper(),
                     Description = "Quản trị viên hệ thống",
                     ConcurrencyStamp = Guid.NewGuid().ToString()
                 },
-                new ApplicationRole
-                {
-                    Id = 2,
-                    Name = RoleNames.Lecturer,
+                new ApplicationRole 
+                { 
+                    Id = 2, 
+                    Name = RoleNames.Lecturer, 
                     NormalizedName = RoleNames.Lecturer.ToUpper(),
                     Description = "Giảng viên",
                     ConcurrencyStamp = Guid.NewGuid().ToString()
                 },
-                new ApplicationRole
-                {
-                    Id = 3,
-                    Name = RoleNames.Student,
+                new ApplicationRole 
+                { 
+                    Id = 3, 
+                    Name = RoleNames.Student, 
                     NormalizedName = RoleNames.Student.ToUpper(),
                     Description = "Sinh viên",
                     ConcurrencyStamp = Guid.NewGuid().ToString()
